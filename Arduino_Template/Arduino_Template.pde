@@ -132,12 +132,11 @@ void draw()
  */
  if(robot_state == STATE_AUTO)
  {
-   pixelate(); 
+   bouncelaser();
  }
  /*
  *  end of looped code
  */ 
- //delay(1000);
 }
 
 
@@ -149,15 +148,15 @@ void pixelate()
   byte i, px, pxs, pxss, pxz, pxsz, pxssz, randColor;
   int g, w, b, c;
   g = strip.Color(255,255,49);
-  b = strip.Color(255,255,0);
+  b = strip.Color(255,255,000);
   w = strip.Color(255,255,255);
-  c = strip.Color(0,0,0);
+  c = strip.Color(000,000,000);
 
   int gz, wz, bz, cz;
   gz = stripz.Color(255,255,49);
-  bz = stripz.Color(255,255,0);
+  bz = stripz.Color(255,255,000);
   wz = stripz.Color(255,255,255);
-  cz = stripz.Color(0,0,0);
+  cz = stripz.Color(000,000,000);
 
   px = (byte)random(0, strip.numPixels());
   pxs = (byte)random(0, strip.numPixels());
@@ -210,16 +209,35 @@ void pixelate()
 
 }
 
-void score()
+void bouncelaser()
 {
-  for (byte i = 0; i < 64; i++) {
-    byte whiteness = (byte)(i * 4);
-    fillStrip(strip.Color(whiteness, 255, whiteness), (byte)255);
-    fillStripZ(stripz.Color(whiteness, 255, whiteness), (byte)255);
+  byte i, w;
+  int c;
+  c = strip.Color(0, 255, 0);
+
+  w = 12;
+
+  for (i = w; i < (strip.numPixels() + (w - 6)); i++)
+  {
+    strip.setPixelColor(i, c);
+    strip.setPixelColor((byte)(i - w), 0);
+    //strip.setPixelColor(i+5,0);
     strip.show();
-    stripz.show();
+    delay(15);
   }
+
+  for (i = (byte)(strip.numPixels() - (w - 6)); (i + 6) > 0; i--)
+  {
+    strip.setPixelColor(i, c);
+    strip.setPixelColor((byte)(i - w), 0);
+    //strip.setPixelColor(i+5,0);
+    strip.show();
+    delay(15);
+  }
+
 }
+
+
 
 void fillStrip(int c, byte brightness) {
   byte r = (byte)(c >> 16);

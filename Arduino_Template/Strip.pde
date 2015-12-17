@@ -3,7 +3,7 @@ public class Strip
   private byte pinNum = 0;
   private byte stripLength = 0;
   private int place = 0;
-  private color[] leds;
+  private int[] leds;
   
   public Strip(byte stripLength, byte pinNum, int place)
   {
@@ -16,25 +16,27 @@ public class Strip
   {
     rectMode(CORNERS);
     fill(#AAAAAA);
+    stroke(#00FF00);
     rect(0, place, width, (place + 25));
-    leds = new color[stripLength];
+    leds = new int[stripLength];
   }
   
   public void show()
   {
-    strokeWeight(3);
-    stroke(#00FF00);
     fill(#AAAAAA);
-    rect(0, place, width, (place + 25));
-    noFill();
-    int ledDistance = (int)((width / stripLength) * 1.3);
+    stroke(#00ff00);
+    rect(0, place, width, (place + 25));  
+    noStroke();
+    
+    int ledDistance = (int)((width / stripLength) * 1.2);
     for(int i = 0; i < stripLength; i ++)
     {
+       color c = color(leds[i]);
        strokeWeight(4);
-       stroke(leds[i]);
+       stroke(red(leds[i]), green(leds[i]), blue(leds[i]));
        point(ledDistance * (i + 1), place + 15);
     }
-  }
+}
   
   public byte numPixels()
   {
@@ -42,14 +44,14 @@ public class Strip
   }
   
   public int Color(int r, int g, int b)
-  {
-    String hex = String.format("#%02X%02X%02X", r, g, b);
-    //println(r + " " + g + " " + b);
-    //return Integer.parseInt(hex);
-    
-    return Integer.parseInt(hex.replaceFirst("#", ""), 16);
+  {  
+    int rgb = r;
+    rgb = rgb << 8;
+    rgb |= g;
+    rgb = rgb << 8;
+    rgb |= b;
+    return rgb;
   }
-  
   public void setPixelColor(byte pixel, int c)
   {
     leds[pixel] = c;
