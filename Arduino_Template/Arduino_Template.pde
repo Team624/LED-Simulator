@@ -32,16 +32,6 @@ boolean stay_white = false;
 /*
 *  ends pin setup 
 */
-
-
-
-
-
-
-
-
-
-
 //sets up all instances of Serial and LED strips
 serial Serial = new serial();
 //sets up all LED strips
@@ -49,17 +39,11 @@ Strip strip = new Strip(/* Strip Length */(byte)120, PIN, 108); //creates an LED
 Strip stripz = new Strip(/* Strip Length */ (byte)120, PINZ, 366); //creates an LED strip instance 'stripz' You can create more
 //end of setup                                                  //instances below, but to use them, you must use the begin and show methods
 
-
-
-
-
-
-
-
 void setup()
 {
   size(700,500);
-  background(#000000);
+  
+  //background(#000000);
   
   /*
   *  all setup code goes here
@@ -78,13 +62,6 @@ void setup()
   */
   
 }
-
-
-
-
-
-
-
 
 /*
 *  defines states of robot
@@ -116,12 +93,6 @@ byte robot_state, old_state, first_loop;
 /*
 *  end declarations
 */
-
-
-
-
-
-
 
 void draw()
 {

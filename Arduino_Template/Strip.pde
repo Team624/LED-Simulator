@@ -31,10 +31,15 @@ public class Strip
     int ledDistance = (int)((width / stripLength) * 1.2);
     for(int i = 0; i < stripLength; i ++)
     {
+      try{
        color c = color(leds[i]);
        strokeWeight(4);
        stroke(red(leds[i]), green(leds[i]), blue(leds[i]));
        point(ledDistance * (i + 1), place + 15);
+      }
+      catch(ArrayIndexOutOfBoundsException e){
+        e.printStackTrace();
+      }
     }
 }
   
@@ -54,6 +59,12 @@ public class Strip
   }
   public void setPixelColor(byte pixel, int c)
   {
+    try{
     leds[pixel] = c;
+    }
+    catch(ArrayIndexOutOfBoundsException e)
+    {
+      e.printStackTrace();
+    }
   }
 }
