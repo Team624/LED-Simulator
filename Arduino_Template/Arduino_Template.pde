@@ -41,7 +41,7 @@ Strip stripz = new Strip(/* Strip Length */ (byte)120, PINZ, 366); //creates an 
 
 void setup()
 {
-  size(700,500);
+  size(900,500);
   
   //background(#000000);
   
@@ -101,9 +101,17 @@ void draw()
  *  this is the place where all of your drawing code goes. what would go into loop()
  *  would be put here
  */
+ 
+  //bouncelaser(); //doesn't work
+  // fillStrip(strip.Color(255,000,000),(byte)255); //works
+  /// fillStripZ(stripz.Color(255,000,000),(byte)255); //works
+  //pixelate(); //works
+  rainbow((byte)0); //doesnt work yet
+  //coop_rainbowlaser(); //doesnt work yet
+  
  if(robot_state == STATE_AUTO)
  {
-   bouncelaser();
+  //pixelate();
  }
  /*
  *  end of looped code
@@ -114,6 +122,23 @@ void draw()
 /* 
 *  Put any methods in here
 */
+void rainbow(byte wait) {
+  byte i, j;
+
+  for (j = 0; j < 256; j++) {
+    for (i = 0; i < strip.numPixels(); i++) {
+      strip.setPixelColor(i, Wheel((byte)((i + j) & 255)));
+    }
+    for (i = 0; i < stripz.numPixels(); i++) {
+      stripz.setPixelColor(i, Wheel((byte)((i + j) & 255)));
+    }
+
+    strip.show();
+    stripz.show();
+    delay(wait);
+  }
+}
+
 void pixelate()
 {
   byte i, px, pxs, pxss, pxz, pxsz, pxssz, randColor;
@@ -180,6 +205,72 @@ void pixelate()
 
 }
 
+void coop_rainbowlaser()
+{
+  byte i;
+  int ii, c, w, r, o, y, g, b, v;
+  r = strip.Color(255, 0, 0);
+  o = strip.Color(255, 128, 0);
+  y = strip.Color(255, 255, 0);
+
+  g = strip.Color(0, 255, 0);
+
+  b = strip.Color(0, 0, 255);
+  ii = strip.Color(128, 0, 255);
+  v = strip.Color(255, 0, 255);
+
+  w = 32;
+
+  int iii, cz, wz, rz, oz, yz, gz, bz, iz, vz;
+  rz = stripz.Color(255, 0, 0);
+  oz = stripz.Color(255, 128, 0);
+  yz = stripz.Color(255, 255, 0);
+
+  gz = stripz.Color(0, 255, 0);
+
+  bz = stripz.Color(0, 0, 255);
+  iii = stripz.Color(128, 0, 255);
+  vz = stripz.Color(255, 0, 255);
+
+  if (!stay_white)
+  {
+    for (i = (byte)(strip.numPixels() + w); i > 0; i--)
+    {
+      strip.setPixelColor(i, y);
+      strip.setPixelColor((byte)(i - 4), v);
+      strip.setPixelColor((byte)(i - 8), ii);
+      strip.setPixelColor((byte)(i - 12), b);
+      strip.setPixelColor((byte)(i - 16), g);
+      strip.setPixelColor((byte)(i - 20), y);
+      strip.setPixelColor((byte)(i - 24), o);
+      strip.setPixelColor((byte)(i - 28), r);
+      strip.setPixelColor((byte)(i - w), y);
+
+      stripz.setPixelColor(i, y);
+      stripz.setPixelColor((byte)(i - 4), vz);
+      stripz.setPixelColor((byte)(i - 8), iii);
+      stripz.setPixelColor((byte)(i - 12), bz);
+      stripz.setPixelColor((byte)(i - 16), gz);
+      stripz.setPixelColor((byte)(i - 20), yz);
+      stripz.setPixelColor((byte)(i - 24), oz);
+      stripz.setPixelColor((byte)(i - 28), rz);
+      //stripz.setPixelColor(i-w,strip.Color(120,120,120));
+
+      strip.show();
+      stripz.show();
+      //delay(15);
+    }
+    stay_white = true;
+  }
+  else
+  {
+    fillStrip(y, (byte)255);
+    fillStripZ(y, (byte)255);
+    strip.show();
+    stripz.show();
+  }
+}
+
 void bouncelaser()
 {
   byte i, w;
@@ -194,7 +285,7 @@ void bouncelaser()
     strip.setPixelColor((byte)(i - w), 0);
     //strip.setPixelColor(i+5,0);
     strip.show();
-    delay(15);
+    //delay(15);
   }
 
   for (i = (byte)(strip.numPixels() - (w - 6)); (i + 6) > 0; i--)
@@ -203,7 +294,7 @@ void bouncelaser()
     strip.setPixelColor((byte)(i - w), 0);
     //strip.setPixelColor(i+5,0);
     strip.show();
-    delay(15);
+    //delay(15);
   }
 
 }
@@ -211,28 +302,43 @@ void bouncelaser()
 
 
 void fillStrip(int c, byte brightness) {
-  byte r = (byte)(c >> 16);
-  byte g = (byte)(c >>  8);
-  byte b = (byte)c;
+  int r = (int)(c >> 16);
+  int g = (int)(c >>  8);
+  int b = (int)c;
   for(byte i=0; i<strip.numPixels(); i++) {
     strip.setPixelColor(i, strip.Color((r * brightness / 255), (g * brightness / 255), (b * brightness / 255)));
   } 
   //
- // strip.show();
+  strip.show();
 }
 
 void fillStripZ(int c, byte brightness) {
-  byte r = (byte)(c >> 16);
-  byte g = (byte)(c >>  8);
-  byte b = (byte)c;
-  for(byte i=0; i<strip.numPixels(); i++) {
+  int r = (int)(c >> 16);
+  int g = (int)(c >>  8);
+  int b = (int)c;
+  for(byte i=0; i<stripz.numPixels(); i++) {
     stripz.setPixelColor(i, stripz.Color((r * brightness / 255), (g * brightness / 255), (b * brightness / 255)));
   } 
   //
- // strip.show();
+  stripz.show();
 }
 
+/*
+*  Utilities.h converted to Java
+*/
 
+int Wheel(byte WheelPos) {
+  WheelPos = (byte)(255 - WheelPos);
+  if(WheelPos < 85) {
+   return strip.Color(255 - WheelPos * 3, 0, WheelPos * 3);
+  } else if(WheelPos < 170) {
+    WheelPos -= 85;
+   return strip.Color(0, WheelPos * 3, 255 - WheelPos * 3);
+  } else {
+   WheelPos -= 170;
+   return strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
+  }
+}
 
 /* 
 *  End of User entered methods
