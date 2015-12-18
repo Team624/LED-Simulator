@@ -108,13 +108,13 @@ void draw()
   //bouncelaser(); //doesn't work
   //fillStrip(strip.Color(255,000,255),(byte)255); //works
   //fillStripZ(stripz.Color(255,000,000),(byte)255); //works
-  pixelate(); //works
+  //pixelate(); //works
   //rainbow((byte)0); //doesnt work yet
   //coop_rainbowlaser(); //doesnt work yet
   
  if(robot_state == STATE_AUTO)
  {
-  //pixelate();
+  pixelate();
  }
  /*
  *  end of looped code
@@ -380,5 +380,37 @@ void stateSelector()
   text("CO OP", width - 70, 400);
   if(mousePressed == true)
   {
+    if(mouseX > width - 100 && (mouseY > 0 && mouseY < 50))
+    {
+      robot_state = (byte)STATE_AUTO;
+    }
+    if(mouseX > width - 100 && (mouseY > 50 && mouseY < 100))
+    {
+      robot_state = (byte)STATE_TELEOP;
+    }
+    if(mouseX > width - 100 && (mouseY > 100 && mouseY < 150))
+    {
+      robot_state = (byte)STATE_LOST_COMM;
+    }
+    if(mouseX > width - 100 && (mouseY > 150 && mouseY < 200))
+    {
+      robot_state = (byte)STATE_SCORE;
+    }
+    if(mouseX > width - 100 && (mouseY > 200 && mouseY < 250))
+    {
+      robot_state = (byte)STATE_FULL;
+    }
+    if(mouseX > width - 100 && (mouseY > 250 && mouseY < 300))
+    {
+      robot_state = (byte)STATE_BROWNOUT;
+    }
+    if(mouseX > width - 100 && (mouseY > 300 && mouseY < 350))
+    {
+      robot_state = (byte)STATE_DISABLED;
+    }
+    if(mouseX > width - 100 && (mouseY > 350 && mouseY < 400))
+    {
+      robot_state = (byte)STATE_COOP;
+    }    
   }
 }

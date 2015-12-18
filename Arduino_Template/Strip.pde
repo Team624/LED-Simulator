@@ -15,7 +15,7 @@ public class Strip
   public void begin()
   {
     rectMode(CORNERS);
-    fill(#AAAAAA);
+    fill(#000000);
     stroke(#00FF00);
     strokeWeight(3);
     rect(0, place, width - 100, (place + 25));
@@ -24,7 +24,7 @@ public class Strip
   
   public void show()
   {
-    fill(#AAAAAA);
+    fill(#000000);
     strokeWeight(3);
     stroke(#00ff00);
     rect(0, place, width - 100, (place + 25));  
@@ -34,12 +34,7 @@ public class Strip
     for(int i = 0; i < stripLength; i ++)
     {
        color c;
-       if(leds[i] == 0) {
-         c = color(11184810);
-       }
-       else {
-         c = leds[i];
-       }
+       c = leds[i];
        strokeWeight(6);
        stroke(red(c), green(c), blue(c));
        point(ledDistance * (i + 1), place + 13);
