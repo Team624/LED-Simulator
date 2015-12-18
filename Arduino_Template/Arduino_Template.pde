@@ -41,7 +41,10 @@ Strip stripz = new Strip(/* Strip Length */ (byte)120, PINZ, 366); //creates an 
 
 void setup()
 {
-  size(900,500);
+  size(1300,500);
+  PFont font;
+  font = createFont("Algerian", 14);
+  textFont(font);
   
   //background(#000000);
   
@@ -96,17 +99,17 @@ byte robot_state, old_state, first_loop;
 
 void draw()
 {
-  robot_state = (byte)STATE_AUTO;
+  stateSelector();
  /* 
  *  this is the place where all of your drawing code goes. what would go into loop()
  *  would be put here
  */
  
   //bouncelaser(); //doesn't work
-  // fillStrip(strip.Color(255,000,000),(byte)255); //works
-  /// fillStripZ(stripz.Color(255,000,000),(byte)255); //works
-  //pixelate(); //works
-  rainbow((byte)0); //doesnt work yet
+  //fillStrip(strip.Color(255,000,255),(byte)255); //works
+  //fillStripZ(stripz.Color(255,000,000),(byte)255); //works
+  pixelate(); //works
+  //rainbow((byte)0); //doesnt work yet
   //coop_rainbowlaser(); //doesnt work yet
   
  if(robot_state == STATE_AUTO)
@@ -326,7 +329,6 @@ void fillStripZ(int c, byte brightness) {
 /*
 *  Utilities.h converted to Java
 */
-
 int Wheel(byte WheelPos) {
   WheelPos = (byte)(255 - WheelPos);
   if(WheelPos < 85) {
@@ -347,4 +349,36 @@ int Wheel(byte WheelPos) {
 //necessary methods in code
 void pinMode(int pin, boolean output)
 {
+}
+
+
+/*
+int STATE_TELEOP = 0b000;
+int STATE_AUTO = 0b001;
+int STATE_SCORE = 0b010;
+int STATE_COOP = 0b011;
+int STATE_BROWNOUT = 0b100;
+int STATE_LOST_COMM = 0b101;
+int STATE_FULL = 0b110;
+int STATE_DISABLED = 0b111;
+*/
+void stateSelector()
+{
+  rectMode(CORNERS);
+  stroke(#00FF00);
+  strokeWeight(3);
+  fill(#000000);
+  rect(width - 100, 0, width, height); 
+  fill(#00FF00);
+  text("Auto", width - 70, 50);
+  text("Teleop", width - 80, 100);
+  text("Lost-Comms", width - 90, 150);
+  text("Score", width - 75, 200);
+  text("Full", width - 70, 250);
+  text("Brownout", width - 90, 300);
+  text("Disabled", width - 85, 350);
+  text("CO OP", width - 70, 400);
+  if(mousePressed == true)
+  {
+  }
 }

@@ -17,27 +17,34 @@ public class Strip
     rectMode(CORNERS);
     fill(#AAAAAA);
     stroke(#00FF00);
-    rect(0, place, width, (place + 25));
+    strokeWeight(3);
+    rect(0, place, width - 100, (place + 25));
     leds = new int[stripLength];
   }
   
   public void show()
   {
     fill(#AAAAAA);
+    strokeWeight(3);
     stroke(#00ff00);
-    rect(0, place, width, (place + 25));  
+    rect(0, place, width - 100, (place + 25));  
     noStroke();
     
-    int ledDistance = (int)((width / stripLength) * 1.2);
+    float ledDistance = ((width - 100)/ stripLength) * .99;
     for(int i = 0; i < stripLength; i ++)
     {
-       color c = color(leds[i]);
-       strokeWeight(4);
-       stroke(red(leds[i]), green(leds[i]), blue(leds[i]));
-       point(ledDistance * (i + 1), place + 15);
-      
+       color c;
+       if(leds[i] == 0) {
+         c = color(11184810);
+       }
+       else {
+         c = leds[i];
+       }
+       strokeWeight(6);
+       stroke(red(c), green(c), blue(c));
+       point(ledDistance * (i + 1), place + 13);
     }
-}
+  }  
   
   public byte numPixels()
   {
@@ -55,13 +62,10 @@ public class Strip
   }
   
   public void setPixelColor(byte pixel, int c)
-  {/*
-    if(c==0)
-    {
-      c = Color(000,000,000); 
-    }*/
+  {
     if(pixel>=0 && pixel<numPixels())
         leds[pixel] = c;
-    
+    else
+      leds[pixel] = 11184810;
   }
 }
