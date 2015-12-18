@@ -43,7 +43,7 @@ void setup()
 {
   size(1300,500);
   PFont font;
-  font = createFont("Algerian", 14);
+  font = createFont("Calibri", 14);
   textFont(font);
   
   //background(#000000);
@@ -109,12 +109,20 @@ void draw()
   //fillStrip(strip.Color(255,000,255),(byte)255); //works
   //fillStripZ(stripz.Color(255,000,000),(byte)255); //works
   //pixelate(); //works
-  //rainbow((byte)0); //doesnt work yet
+  //rainbow((byte)0); //works now
   //coop_rainbowlaser(); //doesnt work yet
   
  if(robot_state == STATE_AUTO)
  {
   pixelate();
+ }
+ else if(robot_state == STATE_DISABLED)
+ {
+  rainbow((byte)0);
+ }
+ else
+ {
+   
  }
  /*
  *  end of looped code
@@ -125,10 +133,10 @@ void draw()
 /* 
 *  Put any methods in here
 */
+byte j=0;
 void rainbow(byte wait) {
-  byte i, j;
+  byte i;
 
-  for (j = 0; j < 256; j++) {
     for (i = 0; i < strip.numPixels(); i++) {
       strip.setPixelColor(i, Wheel((byte)((i + j) & 255)));
     }
@@ -139,6 +147,14 @@ void rainbow(byte wait) {
     strip.show();
     stripz.show();
     delay(wait);
+  
+  if(j<255)
+  {
+    j++;
+  }
+  else
+  {
+    j=0;
   }
 }
 

@@ -35,7 +35,7 @@ public class Strip
     {
        color c;
        c = leds[i];
-       strokeWeight(6);
+       strokeWeight(10);
        stroke(red(c), green(c), blue(c));
        point(ledDistance * (i + 1), place + 13);
     }
