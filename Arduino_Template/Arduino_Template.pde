@@ -70,6 +70,7 @@ void setup()
 *  defines states of robot
 *  these states are passed from robot code
 */
+int STATE_UNKNOWN = 00000;
 int STATE_TELEOP = 0b000;
 int STATE_AUTO = 0b001;
 int STATE_SCORE = 0b010;
@@ -105,13 +106,9 @@ void draw()
  *  would be put here
  */
   
- /*if(robot_state == STATE_AUTO)
+ if(robot_state == STATE_AUTO)
  {
   pixelate();
- }
- else if(robot_state == STATE_DISABLED)
- {
-  //rainbow((byte)0);
  }
  else if(robot_state == STATE_SCORE)
  {  
@@ -136,10 +133,11 @@ void draw()
  }
  else
  {
-   clearStrip();
- }*/
- fillStrip(strip.Color(255, 0, 0), (byte)255);
- fillStripZ(stripz.Color(255, 0, 0), (byte)255);
+  // clearStrip();
+  rainbow(0);
+ }
+ //fillStrip(strip.Color(255, 0, 0), (byte)255);
+// fillStripZ(stripz.Color(255, 0, 0), (byte)255);
  //lavalamp();
  /*
  *  end of looped code
@@ -255,8 +253,32 @@ void fillStripZ(int c, byte brightness) {
   //
  // strip.show();
 }
+int j=0;
+void rainbow(int wait) {
+  int i;
+
+  
+    for (i = 0; i < strip.numPixels(); i++) {
+      strip.setPixelColor(i, Wheel((i + j) & 255));
+    }
+    for (i = 0; i < stripz.numPixels(); i++) {
+      stripz.setPixelColor(i, Wheel((i + j) & 255));
+    }
 
 
+    strip.show();
+    stripz.show();
+    delay(wait);
+  
+  if(j<255)
+  {
+    j++;
+  }
+  else
+  {
+    j=0;
+  }
+}
 
 
 
@@ -286,6 +308,7 @@ void stateSelector()
   text("Brownout", width - 90, 300);
   text("Disabled", width - 85, 350);
   text("CO OP", width - 70, 400);
+  text("Unknown", width - 80, 450);
   if(mousePressed == true)
   {
     if(mouseX > width - 100 && (mouseY > 0 && mouseY < 50))
@@ -320,6 +343,10 @@ void stateSelector()
     {
       robot_state = (byte)STATE_COOP;
     }    
+    if(mouseX > width - 100 && (mouseY > 400 && mouseY < 450))
+    {
+      robot_state = (byte)STATE_UNKNOWN;
+    }
   }
 }
 
@@ -337,4 +364,17 @@ void clearStrip()
      stripz.show();
      delay(1);
    }
+}
+
+int Wheel(int WheelPos) {
+  WheelPos = 255 - WheelPos;
+  if(WheelPos < 85) {
+   return strip.Color(255 - WheelPos * 3, 0, WheelPos * 3);
+  } else if(WheelPos < 170) {
+    WheelPos -= 85;
+   return strip.Color(0, WheelPos * 3, 255 - WheelPos * 3);
+  } else {
+   WheelPos -= 170;
+   return strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
+  }
 }
