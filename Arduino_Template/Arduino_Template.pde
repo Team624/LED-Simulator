@@ -92,7 +92,7 @@ byte finger_height;
 boolean elevator_auto;
 boolean stabilizer_on;
 boolean finger_on;
-byte robot_state, old_state, first_loop;
+byte robot_state = 0, old_state, first_loop;
 /*
 *  end declarations
 */
@@ -104,80 +104,77 @@ void draw()
  *  this is the place where all of your drawing code goes. what would go into loop()
  *  would be put here
  */
- 
-  //bouncelaser(); //doesn't work
-  //fillStrip(strip.Color(255,000,255),(byte)255); //works
-  //fillStripZ(stripz.Color(255,000,000),(byte)255); //works
-  //pixelate(); //works
-  //rainbow((byte)0); //works now
-  //coop_rainbowlaser(); //doesnt work yet
   
- if(robot_state == STATE_AUTO)
+ /*if(robot_state == STATE_AUTO)
  {
   pixelate();
  }
  else if(robot_state == STATE_DISABLED)
  {
-  rainbow((byte)0);
+  //rainbow((byte)0);
+ }
+ else if(robot_state == STATE_SCORE)
+ {  
+ }
+ else if(robot_state == STATE_COOP)
+ {
+ }
+ else if(robot_state == STATE_BROWNOUT)
+ {
+ }
+ else if(robot_state == STATE_LOST_COMM)
+ {
+   fillStrip(strip.Color(255, 0, 0), (byte)255);
+   fillStripZ(stripz.Color(255, 0, 0), (byte)255);
+ }
+ else if(robot_state == STATE_FULL)
+ {
+ }
+ else if(robot_state == STATE_DISABLED)
+ {
+   lavalamp();
  }
  else
  {
-   
- }
+   clearStrip();
+ }*/
+ fillStrip(strip.Color(255, 0, 0), (byte)255);
+ fillStripZ(stripz.Color(255, 0, 0), (byte)255);
+ //lavalamp();
  /*
  *  end of looped code
  */ 
+ strip.show();
+ stripz.show();
 }
+
+
 
 
 /* 
 *  Put any methods in here
 */
-byte j=0;
-void rainbow(byte wait) {
-  byte i;
-
-    for (i = 0; i < strip.numPixels(); i++) {
-      strip.setPixelColor(i, Wheel((byte)((i + j) & 255)));
-    }
-    for (i = 0; i < stripz.numPixels(); i++) {
-      stripz.setPixelColor(i, Wheel((byte)((i + j) & 255)));
-    }
-
-    strip.show();
-    stripz.show();
-    delay(wait);
-  
-  if(j<255)
-  {
-    j++;
-  }
-  else
-  {
-    j=0;
-  }
-}
-
 void pixelate()
 {
-  byte i, px, pxs, pxss, pxz, pxsz, pxssz, randColor;
+  byte i, px, pxs, pxss, pxz, pxsz, pxssz, Color;
   int g, w, b, c;
-  g = strip.Color(255,255,49);
-  b = strip.Color(255,255,000);
-  w = strip.Color(255,255,255);
-  c = strip.Color(000,000,000);
+  g = strip.Color(255, 255, 49);
+  b = strip.Color(255, 255, 0);
+  w = strip.Color(255, 255, 255);
+  c = strip.Color(0, 0, 0);
 
   int gz, wz, bz, cz;
-  gz = stripz.Color(255,255,49);
-  bz = stripz.Color(255,255,000);
-  wz = stripz.Color(255,255,255);
-  cz = stripz.Color(000,000,000);
+  gz = stripz.Color(255, 255, 49);
+  bz = stripz.Color(255, 255, 0);
+  wz = stripz.Color(255, 255, 255);
+  cz = stripz.Color(0, 0, 0);
+
 
   px = (byte)random(0, strip.numPixels());
   pxs = (byte)random(0, strip.numPixels());
   pxss = (byte)random(0, strip.numPixels());
-  randColor = (byte)random(0, 4);
-  if (randColor == 0)
+  Color = (byte)random(0, 4);
+  if (Color == 0)
   {
     strip.setPixelColor(px, g);
     strip.setPixelColor(pxs, g);
@@ -187,7 +184,7 @@ void pixelate()
     stripz.setPixelColor(pxs, gz);
     stripz.setPixelColor(pxss, gz);
   }
-  else if (randColor == 1)
+  else if (Color == 1)
   {
     strip.setPixelColor(px, b);
     strip.setPixelColor(pxs, b);
@@ -197,7 +194,7 @@ void pixelate()
     stripz.setPixelColor(pxs, bz);
     stripz.setPixelColor(pxss, bz);
   }
-  else if (randColor == 2)
+  else if (Color == 2)
   {
     strip.setPixelColor(px, c);
     strip.setPixelColor(pxs, c);
@@ -217,146 +214,52 @@ void pixelate()
     stripz.setPixelColor(pxs, w);
     stripz.setPixelColor(pxss, w);
   }
-
-
   strip.show();
   stripz.show();
-
 }
 
-void coop_rainbowlaser()
+void lavalamp()
 {
-  byte i;
-  int ii, c, w, r, o, y, g, b, v;
-  r = strip.Color(255, 0, 0);
-  o = strip.Color(255, 128, 0);
-  y = strip.Color(255, 255, 0);
-
-  g = strip.Color(0, 255, 0);
-
-  b = strip.Color(0, 0, 255);
-  ii = strip.Color(128, 0, 255);
-  v = strip.Color(255, 0, 255);
-
-  w = 32;
-
-  int iii, cz, wz, rz, oz, yz, gz, bz, iz, vz;
-  rz = stripz.Color(255, 0, 0);
-  oz = stripz.Color(255, 128, 0);
-  yz = stripz.Color(255, 255, 0);
-
-  gz = stripz.Color(0, 255, 0);
-
-  bz = stripz.Color(0, 0, 255);
-  iii = stripz.Color(128, 0, 255);
-  vz = stripz.Color(255, 0, 255);
-
-  if (!stay_white)
-  {
-    for (i = (byte)(strip.numPixels() + w); i > 0; i--)
-    {
-      strip.setPixelColor(i, y);
-      strip.setPixelColor((byte)(i - 4), v);
-      strip.setPixelColor((byte)(i - 8), ii);
-      strip.setPixelColor((byte)(i - 12), b);
-      strip.setPixelColor((byte)(i - 16), g);
-      strip.setPixelColor((byte)(i - 20), y);
-      strip.setPixelColor((byte)(i - 24), o);
-      strip.setPixelColor((byte)(i - 28), r);
-      strip.setPixelColor((byte)(i - w), y);
-
-      stripz.setPixelColor(i, y);
-      stripz.setPixelColor((byte)(i - 4), vz);
-      stripz.setPixelColor((byte)(i - 8), iii);
-      stripz.setPixelColor((byte)(i - 12), bz);
-      stripz.setPixelColor((byte)(i - 16), gz);
-      stripz.setPixelColor((byte)(i - 20), yz);
-      stripz.setPixelColor((byte)(i - 24), oz);
-      stripz.setPixelColor((byte)(i - 28), rz);
-      //stripz.setPixelColor(i-w,strip.Color(120,120,120));
-
-      strip.show();
-      stripz.show();
-      //delay(15);
-    }
-    stay_white = true;
+  int t = millis() / 40;
+  for (byte i = 0; i < 122; i++) {
+    int brightness = (int)(sin((t + i) / 4.0) * 255);
+    int other = (int)(cos((t * 1.1 + i) / 3.5) * 255);
+    brightness = brightness - other;
+    int rrr = (int)(cos((t / 1 + i / 2) << 8) * 255);
+    strip.setPixelColor(i, strip.Color(0, brightness, 0));
+    stripz.setPixelColor(i, strip.Color(0, brightness, 0));
   }
-  else
-  {
-    fillStrip(y, (byte)255);
-    fillStripZ(y, (byte)255);
-    strip.show();
-    stripz.show();
-  }
+  //int g;
+  strip.show();
+  stripz.show();
 }
-
-void bouncelaser()
-{
-  byte i, w;
-  int c;
-  c = strip.Color(0, 255, 0);
-
-  w = 12;
-
-  for (i = w; i < (strip.numPixels() + (w - 6)); i++)
-  {
-    strip.setPixelColor(i, c);
-    strip.setPixelColor((byte)(i - w), 0);
-    //strip.setPixelColor(i+5,0);
-    strip.show();
-    //delay(15);
-  }
-
-  for (i = (byte)(strip.numPixels() - (w - 6)); (i + 6) > 0; i--)
-  {
-    strip.setPixelColor(i, c);
-    strip.setPixelColor((byte)(i - w), 0);
-    //strip.setPixelColor(i+5,0);
-    strip.show();
-    //delay(15);
-  }
-
-}
-
-
 
 void fillStrip(int c, byte brightness) {
-  int r = (int)(c >> 16);
-  int g = (int)(c >>  8);
-  int b = (int)c;
-  for(byte i=0; i<strip.numPixels(); i++) {
+  byte r = (byte)(c >> 16);
+  byte g = (byte)(c >>  8);
+  byte b = (byte)c;
+  for(int i=0; i<strip.numPixels(); i++) {
     strip.setPixelColor(i, strip.Color((r * brightness / 255), (g * brightness / 255), (b * brightness / 255)));
   } 
   //
-  strip.show();
+ // strip.show();
 }
 
 void fillStripZ(int c, byte brightness) {
-  int r = (int)(c >> 16);
-  int g = (int)(c >>  8);
-  int b = (int)c;
-  for(byte i=0; i<stripz.numPixels(); i++) {
-    stripz.setPixelColor(i, stripz.Color((r * brightness / 255), (g * brightness / 255), (b * brightness / 255)));
+  byte r = (byte)(c >> 16);
+  byte g = (byte)(c >>  8);
+  byte b = (byte)c;
+  for(int i=0; i<120; i++) {
+    stripz.setPixelColor(i, strip.Color((r * brightness / 255), (g * brightness / 255), (b * brightness / 255)));
   } 
   //
-  stripz.show();
+ // strip.show();
 }
 
-/*
-*  Utilities.h converted to Java
-*/
-int Wheel(byte WheelPos) {
-  WheelPos = (byte)(255 - WheelPos);
-  if(WheelPos < 85) {
-   return strip.Color(255 - WheelPos * 3, 0, WheelPos * 3);
-  } else if(WheelPos < 170) {
-    WheelPos -= 85;
-   return strip.Color(0, WheelPos * 3, 255 - WheelPos * 3);
-  } else {
-   WheelPos -= 170;
-   return strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
-  }
-}
+
+
+
+
 
 /* 
 *  End of User entered methods
@@ -367,17 +270,6 @@ void pinMode(int pin, boolean output)
 {
 }
 
-
-/*
-int STATE_TELEOP = 0b000;
-int STATE_AUTO = 0b001;
-int STATE_SCORE = 0b010;
-int STATE_COOP = 0b011;
-int STATE_BROWNOUT = 0b100;
-int STATE_LOST_COMM = 0b101;
-int STATE_FULL = 0b110;
-int STATE_DISABLED = 0b111;
-*/
 void stateSelector()
 {
   rectMode(CORNERS);
@@ -429,4 +321,20 @@ void stateSelector()
       robot_state = (byte)STATE_COOP;
     }    
   }
+}
+
+void clearStrip()
+{
+   for(int i = 0; i < strip.numPixels(); i ++)
+   {
+     strip.setPixelColor(i, 0); 
+     strip.show();
+     delay(1);
+   }
+   for(int i = 0; i < stripz.numPixels(); i ++)
+   {
+     stripz.setPixelColor(i,0); 
+     stripz.show();
+     delay(1);
+   }
 }
