@@ -11,7 +11,7 @@
 */
 
 
-
+int boxY = 10000;
 boolean OUTPUT = true;
 boolean INPUT = false;
 
@@ -70,7 +70,7 @@ void setup()
 *  defines states of robot
 *  these states are passed from robot code
 */
-int STATE_UNKNOWN = 00000;
+int STATE_UNKNOWN = 00010;
 int STATE_TELEOP = 0b000;
 int STATE_AUTO = 0b001;
 int STATE_SCORE = 0b010;
@@ -93,7 +93,7 @@ byte finger_height;
 boolean elevator_auto;
 boolean stabilizer_on;
 boolean finger_on;
-byte robot_state = 0, old_state, first_loop;
+byte robot_state = 8, old_state, first_loop;
 /*
 *  end declarations
 */
@@ -101,49 +101,47 @@ byte robot_state = 0, old_state, first_loop;
 void draw()
 {
   stateSelector();
+  stroke(#00FF00);
+  noFill();
+  rectMode(CORNER);
+  rect(width - 100, boxY, 100, 50);
+  rectMode(CORNERS);
  /* 
  *  this is the place where all of your drawing code goes. what would go into loop()
  *  would be put here
  */
-  
- if(robot_state == STATE_AUTO)
- {
-  pixelate();
+ if(robot_state == STATE_TELEOP)
+ {}
+ else if(robot_state == STATE_AUTO) {
+   pixelate();
  }
- else if(robot_state == STATE_SCORE)
- {  
+ else if(robot_state == STATE_SCORE) {
+   rainbowlaser();
  }
- else if(robot_state == STATE_COOP)
- {
+ else if(robot_state == STATE_COOP) {
+   coop_rainbowlaser();
  }
- else if(robot_state == STATE_BROWNOUT)
- {
+ else if(robot_state == STATE_BROWNOUT) {
+   fillStrip(strip.Color(70, 25, 0), (byte)255);
+   fillStripZ(strip.Color(70, 25, 0), (byte)255);
  }
- else if(robot_state == STATE_LOST_COMM)
- {
+ else if(robot_state == STATE_LOST_COMM) {
    fillStrip(strip.Color(255, 0, 0), (byte)255);
    fillStripZ(stripz.Color(255, 0, 0), (byte)255);
  }
- else if(robot_state == STATE_FULL)
- {
+ else if(robot_state == STATE_FULL) {
+   fillStrip(strip.Color(0, 0, 0), (byte)255);
+   fillStripZ(stripz.Color(0, 0, 0), (byte)255);
  }
- else if(robot_state == STATE_DISABLED)
- {
+ else if(robot_state == STATE_DISABLED) {
    lavalamp();
  }
- else
- {
-  // clearStrip();
-  rainbow(0);
+ else {
+   clearStrip();
  }
- //fillStrip(strip.Color(255, 0, 0), (byte)255);
-// fillStripZ(stripz.Color(255, 0, 0), (byte)255);
- //lavalamp();
  /*
  *  end of looped code
  */ 
- strip.show();
- stripz.show();
 }
 
 
@@ -216,6 +214,136 @@ void pixelate()
   stripz.show();
 }
 
+void rainbowlaser()
+{
+  int ii, c, w, r, o, y, g, b, i, v;
+  r = strip.Color(255, 0, 0);
+  o = strip.Color(255, 128, 0);
+  y = strip.Color(255, 255, 0);
+
+  g = strip.Color(0, 255, 0);
+
+  b = strip.Color(0, 0, 255);
+  ii = strip.Color(128, 0, 255);
+  v = strip.Color(255, 0, 255);
+
+  w = 32;
+
+  int iii, cz, wz, rz, oz, yz, gz, bz, iz, vz;
+  rz = stripz.Color(255, 0, 0);
+  oz = stripz.Color(255, 128, 0);
+  yz = stripz.Color(255, 255, 0);
+
+  gz = stripz.Color(0, 255, 0);
+
+  bz = stripz.Color(0, 0, 255);
+  iii = stripz.Color(128, 0, 255);
+  vz = stripz.Color(255, 0, 255);
+
+  if (!stay_white)
+  {
+    for (i = strip.numPixels() + w; i > 0; i--)
+    {
+      strip.setPixelColor(i, strip.Color(120, 120, 120));
+      strip.setPixelColor(i - 4, v);
+      strip.setPixelColor(i - 8, ii);
+      strip.setPixelColor(i - 12, b);
+      strip.setPixelColor(i - 16, g);
+      strip.setPixelColor(i - 20, y);
+      strip.setPixelColor(i - 24, o);
+      strip.setPixelColor(i - 28, r);
+      strip.setPixelColor(i - w, strip.Color(120, 120, 120));
+
+      stripz.setPixelColor(i, strip.Color(120, 120, 120));
+      stripz.setPixelColor(i - 4, vz);
+      stripz.setPixelColor(i - 8, iii);
+      stripz.setPixelColor(i - 12, bz);
+      stripz.setPixelColor(i - 16, gz);
+      stripz.setPixelColor(i - 20, yz);
+      stripz.setPixelColor(i - 24, oz);
+      stripz.setPixelColor(i - 28, rz);
+      //stripz.setPixelColor(i-w,strip.Color(120,120,120));
+
+      strip.show();
+      stripz.show();
+      delay(15);
+    }
+    stay_white = true;
+  }
+  else
+  {
+    fillStrip(strip.Color(120, 120, 120), (byte)255);
+    fillStripZ(stripz.Color(120, 120, 120), (byte)255);
+    strip.show();
+    stripz.show();
+  }
+}
+
+void coop_rainbowlaser()
+{
+  int ii, c, w, r, o, y, g, b, i, v;
+  r = strip.Color(255, 0, 0);
+  o = strip.Color(255, 128, 0);
+  y = strip.Color(255, 255, 0);
+
+  g = strip.Color(0, 255, 0);
+
+  b = strip.Color(0, 0, 255);
+  ii = strip.Color(128, 0, 255);
+  v = strip.Color(255, 0, 255);
+
+  w = 32;
+
+  int iii, cz, wz, rz, oz, yz, gz, bz, iz, vz;
+  rz = stripz.Color(255, 0, 0);
+  oz = stripz.Color(255, 128, 0);
+  yz = stripz.Color(255, 255, 0);
+
+  gz = stripz.Color(0, 255, 0);
+
+  bz = stripz.Color(0, 0, 255);
+  iii = stripz.Color(128, 0, 255);
+  vz = stripz.Color(255, 0, 255);
+
+  if (!stay_white)
+  {
+    for (i = strip.numPixels() + w; i > 0; i--)
+    {
+      strip.setPixelColor(i, y);
+      strip.setPixelColor(i - 4, v);
+      strip.setPixelColor(i - 8, ii);
+      strip.setPixelColor(i - 12, b);
+      strip.setPixelColor(i - 16, g);
+      strip.setPixelColor(i - 20, y);
+      strip.setPixelColor(i - 24, o);
+      strip.setPixelColor(i - 28, r);
+      strip.setPixelColor(i - w, y);
+
+      stripz.setPixelColor(i, y);
+      stripz.setPixelColor(i - 4, vz);
+      stripz.setPixelColor(i - 8, iii);
+      stripz.setPixelColor(i - 12, bz);
+      stripz.setPixelColor(i - 16, gz);
+      stripz.setPixelColor(i - 20, yz);
+      stripz.setPixelColor(i - 24, oz);
+      stripz.setPixelColor(i - 28, rz);
+      //stripz.setPixelColor(i-w,strip.Color(120,120,120));
+
+      strip.show();
+      stripz.show();
+      //delay(15);
+    }
+    stay_white = true;
+  }
+  else
+  {
+    fillStrip(y, (byte)255);
+    fillStripZ(y, (byte)255);
+    strip.show();
+    stripz.show();
+  }
+}
+
 void lavalamp()
 {
   int t = millis() / 40;
@@ -240,7 +368,7 @@ void fillStrip(int c, byte brightness) {
     strip.setPixelColor(i, strip.Color((r * brightness / 255), (g * brightness / 255), (b * brightness / 255)));
   } 
   //
- // strip.show();
+  strip.show();
 }
 
 void fillStripZ(int c, byte brightness) {
@@ -251,12 +379,13 @@ void fillStripZ(int c, byte brightness) {
     stripz.setPixelColor(i, strip.Color((r * brightness / 255), (g * brightness / 255), (b * brightness / 255)));
   } 
   //
- // strip.show();
+  stripz.show();
 }
-int j=0;
+
+
 void rainbow(int wait) {
   int i;
-
+  int j=0;
   
     for (i = 0; i < strip.numPixels(); i++) {
       strip.setPixelColor(i, Wheel((i + j) & 255));
@@ -280,7 +409,18 @@ void rainbow(int wait) {
   }
 }
 
-
+int Wheel(int WheelPos) {
+  WheelPos = 255 - WheelPos;
+  if(WheelPos < 85) {
+   return strip.Color(255 - WheelPos * 3, 0, WheelPos * 3);
+  } else if(WheelPos < 170) {
+    WheelPos -= 85;
+   return strip.Color(0, WheelPos * 3, 255 - WheelPos * 3);
+  } else {
+   WheelPos -= 170;
+   return strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
+  }
+}
 
 
 /* 
@@ -298,55 +438,67 @@ void stateSelector()
   stroke(#00FF00);
   strokeWeight(3);
   fill(#000000);
-  rect(width - 100, 0, width, height); 
+  rect(width - 100, 0, width, height);
+  
   fill(#00FF00);
-  text("Auto", width - 70, 50);
-  text("Teleop", width - 80, 100);
-  text("Lost-Comms", width - 90, 150);
-  text("Score", width - 75, 200);
-  text("Full", width - 70, 250);
-  text("Brownout", width - 90, 300);
-  text("Disabled", width - 85, 350);
-  text("CO OP", width - 70, 400);
-  text("Unknown", width - 80, 450);
+  text("Teleop", width - 85, 50);
+  text("Auto", width - 85, 100);
+  text("Score", width - 85, 150);
+  text("COOP", width - 85, 200);
+  text("Brownout", width - 85, 250);
+  text("Lost Comms", width - 85, 300);
+  text("Full", width - 85, 350);
+  text("Disable", width - 85, 400);
+  text("No State", width - 85, 480);
+  
   if(mousePressed == true)
   {
-    if(mouseX > width - 100 && (mouseY > 0 && mouseY < 50))
-    {
-      robot_state = (byte)STATE_AUTO;
-    }
-    if(mouseX > width - 100 && (mouseY > 50 && mouseY < 100))
+    if(mouseX > width - 100 && mouseY > 25 && 75 > mouseY)
     {
       robot_state = (byte)STATE_TELEOP;
+      boxY = 25;
     }
-    if(mouseX > width - 100 && (mouseY > 100 && mouseY < 150))
+    if(mouseX > width - 100 && mouseY > 75 && 125 > mouseY)
     {
-      robot_state = (byte)STATE_LOST_COMM;
+      robot_state = (byte)STATE_AUTO;
+      boxY = 75;
     }
-    if(mouseX > width - 100 && (mouseY > 150 && mouseY < 200))
+    if(mouseX > width - 100 && mouseY > 125 && 175 > mouseY)
     {
       robot_state = (byte)STATE_SCORE;
+      boxY = 125;
     }
-    if(mouseX > width - 100 && (mouseY > 200 && mouseY < 250))
-    {
-      robot_state = (byte)STATE_FULL;
-    }
-    if(mouseX > width - 100 && (mouseY > 250 && mouseY < 300))
-    {
-      robot_state = (byte)STATE_BROWNOUT;
-    }
-    if(mouseX > width - 100 && (mouseY > 300 && mouseY < 350))
-    {
-      robot_state = (byte)STATE_DISABLED;
-    }
-    if(mouseX > width - 100 && (mouseY > 350 && mouseY < 400))
+    if(mouseX > width - 100 && mouseY > 175 && 225 > mouseY)
     {
       robot_state = (byte)STATE_COOP;
-    }    
-    if(mouseX > width - 100 && (mouseY > 400 && mouseY < 450))
+      boxY = 175;
+    }
+    if(mouseX > width - 100 && mouseY > 225 && 275 > mouseY)
+    {
+      robot_state = (byte)STATE_BROWNOUT;
+      boxY = 225;
+    }
+    if(mouseX > width - 100 && mouseY > 275 && 325 > mouseY)
+    {
+      robot_state = (byte)STATE_LOST_COMM;
+      boxY = 275;
+    }
+    if(mouseX > width - 100 && mouseY > 325 && 375 > mouseY)
+    {
+      robot_state = (byte)STATE_FULL;
+      boxY = 325;
+    }
+    if(mouseX > width - 100 && mouseY > 375 && 425 > mouseY)
+    {
+      robot_state = (byte)STATE_DISABLED;
+      boxY = 375;
+    }
+    if(mouseX > width - 100 && mouseY > 450 && 500 > mouseY)
     {
       robot_state = (byte)STATE_UNKNOWN;
+      boxY = 460;
     }
+    println(robot_state);
   }
 }
 
@@ -364,17 +516,4 @@ void clearStrip()
      stripz.show();
      delay(1);
    }
-}
-
-int Wheel(int WheelPos) {
-  WheelPos = 255 - WheelPos;
-  if(WheelPos < 85) {
-   return strip.Color(255 - WheelPos * 3, 0, WheelPos * 3);
-  } else if(WheelPos < 170) {
-    WheelPos -= 85;
-   return strip.Color(0, WheelPos * 3, 255 - WheelPos * 3);
-  } else {
-   WheelPos -= 170;
-   return strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
-  }
 }
