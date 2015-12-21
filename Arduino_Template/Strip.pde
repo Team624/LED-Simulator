@@ -71,14 +71,16 @@ public class Strip
   
   public void setPixelColor(byte pixel, int c)
   {
-    if(pixel>=0 && pixel<numPixels())
+    if(pixel>=0 && pixel<numPixels()) {
         leds[pixel] = c;
+    }
     else {}
   }
   public void setPixelColor(int pixel, int c)
   {
-    if(pixel>=0 && pixel<numPixels())
+    if(pixel>=0 && pixel<numPixels()) {
         leds[pixel] = c;
+    }
     else {}
   }
 }
