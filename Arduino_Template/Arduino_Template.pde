@@ -137,7 +137,8 @@ void draw()
    lavalamp();
  }
  else {
-   clearStrip();
+   //clearStrip();
+   rainbow(0);
  }
  /*
  *  end of looped code
@@ -382,10 +383,10 @@ void fillStripZ(int c, byte brightness) {
   stripz.show();
 }
 
-
+int j=0;
 void rainbow(int wait) {
   int i;
-  int j=0;
+  
   
     for (i = 0; i < strip.numPixels(); i++) {
       strip.setPixelColor(i, Wheel((i + j) & 255));
