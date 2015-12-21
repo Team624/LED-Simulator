@@ -93,7 +93,8 @@ byte finger_height;
 boolean elevator_auto;
 boolean stabilizer_on;
 boolean finger_on;
-byte robot_state = 8, old_state, first_loop;
+byte robot_state = 8, old_state; 
+boolean first_loop;
 /*
 *  end declarations
 */
@@ -106,12 +107,21 @@ void draw()
   rectMode(CORNER);
   rect(width - 100, boxY, 100, 50);
   rectMode(CORNERS);
+  if(old_state != robot_state)
+  {
+    first_loop = true;
+    stay_white = false;
+    fillStrip(strip.Color(0,0,0), (byte)255);
+    fillStripZ(strip.Color(0,0,0), (byte)255);
+  }
+  old_state = robot_state;
  /* 
  *  this is the place where all of your drawing code goes. what would go into loop()
  *  would be put here
  */
+ 
  if(robot_state == STATE_TELEOP)
- {}
+ {rainbow(0);}
  else if(robot_state == STATE_AUTO) {
    pixelate();
  }
@@ -140,9 +150,12 @@ void draw()
    //clearStrip();
    rainbow(0);
  }
+ 
  /*
  *  end of looped code
  */ 
+ strip.show();
+ stripz.show();
 }
 
 
@@ -214,6 +227,7 @@ void pixelate()
   strip.show();
   stripz.show();
 }
+
 
 void rainbowlaser()
 {
@@ -366,10 +380,11 @@ void fillStrip(int c, byte brightness) {
   byte g = (byte)(c >>  8);
   byte b = (byte)c;
   for(int i=0; i<strip.numPixels(); i++) {
-    strip.setPixelColor(i, strip.Color((r * brightness / 255), (g * brightness / 255), (b * brightness / 255)));
+    int colo = strip.Color((r * brightness / 255), (g * brightness / 255), (b * brightness / 255));
+    strip.setPixelColor(i, colo);
   } 
   //
-  strip.show();
+  //strip.show();
 }
 
 void fillStripZ(int c, byte brightness) {
@@ -380,7 +395,7 @@ void fillStripZ(int c, byte brightness) {
     stripz.setPixelColor(i, strip.Color((r * brightness / 255), (g * brightness / 255), (b * brightness / 255)));
   } 
   //
-  stripz.show();
+  //stripz.show();
 }
 
 int j=0;
@@ -499,7 +514,6 @@ void stateSelector()
       robot_state = (byte)STATE_UNKNOWN;
       boxY = 460;
     }
-    println(robot_state);
   }
 }
 
