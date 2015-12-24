@@ -228,10 +228,11 @@ void pixelate()
   stripz.show();
 }
 
-
+int i = -1;
 void rainbowlaser()
 {
-  int ii, c, w, r, o, y, g, b, i, v;
+  
+  int ii, c, w, r, o, y, g, b, v;
   r = strip.Color(255, 0, 0);
   o = strip.Color(255, 128, 0);
   y = strip.Color(255, 255, 0);
@@ -257,8 +258,12 @@ void rainbowlaser()
 
   if (!stay_white)
   {
-    for (i = strip.numPixels() + w; i > 0; i--)
-    {
+      if(i==-1)
+      {
+        i=strip.numPixels() + w;
+      }
+    //for (i = strip.numPixels() + w; i > 0; i--)
+    //{
       strip.setPixelColor(i, strip.Color(120, 120, 120));
       strip.setPixelColor(i - 4, v);
       strip.setPixelColor(i - 8, ii);
@@ -282,8 +287,16 @@ void rainbowlaser()
       strip.show();
       stripz.show();
       delay(15);
-    }
-    stay_white = true;
+   // }
+     if(i>0)
+     {
+       i--;
+     }
+     else
+     {
+        i=-1;
+        stay_white = true;
+     }
   }
   else
   {
@@ -294,6 +307,7 @@ void rainbowlaser()
   }
 }
 
+int cri = -1;
 void coop_rainbowlaser()
 {
   int ii, c, w, r, o, y, g, b, i, v;
@@ -322,33 +336,49 @@ void coop_rainbowlaser()
 
   if (!stay_white)
   {
-    for (i = strip.numPixels() + w; i > 0; i--)
+    if(cri==-1)
     {
-      strip.setPixelColor(i, y);
-      strip.setPixelColor(i - 4, v);
-      strip.setPixelColor(i - 8, ii);
-      strip.setPixelColor(i - 12, b);
-      strip.setPixelColor(i - 16, g);
-      strip.setPixelColor(i - 20, y);
-      strip.setPixelColor(i - 24, o);
-      strip.setPixelColor(i - 28, r);
-      strip.setPixelColor(i - w, y);
+       cri=strip.numPixels() + w;
+    }
+    //for (i = strip.numPixels() + w; i > 0; i--)
+    //{
+      strip.setPixelColor(cri, y);
+      strip.setPixelColor(cri - 4, v);
+      strip.setPixelColor(cri - 8, ii);
+      strip.setPixelColor(cri - 12, b);
+      strip.setPixelColor(cri - 16, g);
+      strip.setPixelColor(cri - 20, y);
+      strip.setPixelColor(cri - 24, o);
+      strip.setPixelColor(cri - 28, r);
+      strip.setPixelColor(cri - w, y);
 
-      stripz.setPixelColor(i, y);
-      stripz.setPixelColor(i - 4, vz);
-      stripz.setPixelColor(i - 8, iii);
-      stripz.setPixelColor(i - 12, bz);
-      stripz.setPixelColor(i - 16, gz);
-      stripz.setPixelColor(i - 20, yz);
-      stripz.setPixelColor(i - 24, oz);
-      stripz.setPixelColor(i - 28, rz);
+      stripz.setPixelColor(cri, y);
+      stripz.setPixelColor(cri - 4, vz);
+      stripz.setPixelColor(cri - 8, iii);
+      stripz.setPixelColor(cri - 12, bz);
+      stripz.setPixelColor(cri - 16, gz);
+      stripz.setPixelColor(cri - 20, yz);
+      stripz.setPixelColor(cri - 24, oz);
+      stripz.setPixelColor(cri - 28, rz);
       //stripz.setPixelColor(i-w,strip.Color(120,120,120));
 
       strip.show();
       stripz.show();
+      
+      if(cri>0)
+      {
+         cri--;
+      }
+      else
+      {
+         cri = -1;
+         stay_white = true;
+      }
       //delay(15);
-    }
-    stay_white = true;
+    //}
+    strip.show();
+    stripz.show();
+    //stay_white = true;
   }
   else
   {
