@@ -70,19 +70,19 @@ void setup()
 *  defines states of robot
 *  these states are passed from robot code
 */
-int STATE_UNKNOWN = 00010;
-int STATE_TELEOP = 0b000;
-int STATE_AUTO = 0b001;
-int STATE_SCORE = 0b010;
-int STATE_COOP = 0b011;
-int STATE_BROWNOUT = 0b100;
-int STATE_LOST_COMM = 0b101;
-int STATE_FULL = 0b110;
-int STATE_DISABLED = 0b111;
+int STATE_UNKNOWN = 8;
+int STATE_TELEOP = 0;
+int STATE_AUTO = 1;
+int STATE_SCORE = 2;
+int STATE_COOP = 3;
+int STATE_BROWNOUT = 4;
+int STATE_LOST_COMM = 5;
+int STATE_FULL = 6;
+int STATE_DISABLED = 7;
 /*
 *  end of state declaration
 */
-
+int pixColor;
 /*
 *  Declare all variables used in loop and related 
 *  methods here. All uint8_t variables should be 
@@ -120,35 +120,48 @@ void draw()
  *  would be put here
  */
  
- if(robot_state == STATE_TELEOP)
- {rainbow(0);}
+ if(robot_state == STATE_TELEOP) {
+   rainbow(0);
+   print("TELEOP ");
+ }
  else if(robot_state == STATE_AUTO) {
    pixelate();
+   print("AUTO ");
  }
  else if(robot_state == STATE_SCORE) {
    rainbowlaser();
+   print("SCORE ");  
+   robot_state = (byte)STATE_TELEOP;
  }
  else if(robot_state == STATE_COOP) {
    coop_rainbowlaser();
+   robot_state = (byte)STATE_TELEOP;
+   print("COOP ");
  }
  else if(robot_state == STATE_BROWNOUT) {
    fillStrip(strip.Color(70, 25, 0), (byte)255);
    fillStripZ(strip.Color(70, 25, 0), (byte)255);
+   print("BROWNOUT ");
  }
  else if(robot_state == STATE_LOST_COMM) {
-   fillStrip(strip.Color(255, 0, 0), (byte)255);
-   fillStripZ(stripz.Color(255, 0, 0), (byte)255);
+   pixColor = strip.Color(255, 0, 0);
+   fillStrip(pixColor, (byte)255);
+   fillStripZ(pixColor, (byte)255);
+   print("LOST_COMM ");
  }
  else if(robot_state == STATE_FULL) {
    fillStrip(strip.Color(0, 0, 0), (byte)255);
    fillStripZ(stripz.Color(0, 0, 0), (byte)255);
+   print("FULL ");
  }
  else if(robot_state == STATE_DISABLED) {
    lavalamp();
+   print("DISABLED ");
  }
- else {
+ else if(robot_state == STATE_UNKNOWN) {
    //clearStrip();
    rainbow(0);
+   print("no STATE ");
  }
  
  /*
@@ -281,7 +294,7 @@ void rainbowlaser()
 
       strip.show();
       stripz.show();
-      delay(15);
+      delay(500);
     }
     stay_white = true;
   }
@@ -291,6 +304,7 @@ void rainbowlaser()
     fillStripZ(stripz.Color(120, 120, 120), (byte)255);
     strip.show();
     stripz.show();
+    delay(500);
   }
 }
 
@@ -346,7 +360,7 @@ void coop_rainbowlaser()
 
       strip.show();
       stripz.show();
-      //delay(15);
+      delay(50);
     }
     stay_white = true;
   }
@@ -376,9 +390,9 @@ void lavalamp()
 }
 
 void fillStrip(int c, byte brightness) {
-  byte r = (byte)(c >> 16);
-  byte g = (byte)(c >>  8);
-  byte b = (byte)c;
+  byte r = (byte)red(c);
+  byte g = (byte)green(c);
+  byte b = (byte)blue(c);
   for(int i=0; i<strip.numPixels(); i++) {
     int colo = strip.Color((r * brightness / 255), (g * brightness / 255), (b * brightness / 255));
     strip.setPixelColor(i, colo);
@@ -388,9 +402,9 @@ void fillStrip(int c, byte brightness) {
 }
 
 void fillStripZ(int c, byte brightness) {
-  byte r = (byte)(c >> 16);
-  byte g = (byte)(c >>  8);
-  byte b = (byte)c;
+  byte r = (byte)red(c);
+  byte g = (byte)green(c);
+  byte b = (byte)blue(c);
   for(int i=0; i<120; i++) {
     stripz.setPixelColor(i, strip.Color((r * brightness / 255), (g * brightness / 255), (b * brightness / 255)));
   } 
