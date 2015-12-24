@@ -299,7 +299,8 @@ void rainbowlaser()
 
       strip.show();
       stripz.show();
-      delay(500);
+<<<<<<< HEAD
+      delay(15);
    // }
      if(i>0)
      {
@@ -310,6 +311,11 @@ void rainbowlaser()
         i=-1;
         stay_white = true;
      }
+=======
+      delay(500);
+    }
+    stay_white = true;
+>>>>>>> c25fe1bf024a7970de0e90231efa8da611c2ae8c
   }
   else
   {
@@ -378,6 +384,7 @@ void coop_rainbowlaser()
 
       strip.show();
       stripz.show();
+<<<<<<< HEAD
       
       if(cri>0)
       {
@@ -393,6 +400,11 @@ void coop_rainbowlaser()
     strip.show();
     stripz.show();
     //stay_white = true;
+=======
+      delay(50);
+    }
+    stay_white = true;
+>>>>>>> c25fe1bf024a7970de0e90231efa8da611c2ae8c
   }
   else
   {

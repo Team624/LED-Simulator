@@ -37,8 +37,9 @@ public class Strip
        c = leds[i];
        strokeWeight(10);
        stroke(red(c), green(c), blue(c));
-       point(ledDistance * (i + 1), place + 13);
+       point(ledDistance * (i + 1), place + 13);  
     }
+    delay(5);
   }  
   
   public byte numPixels()
@@ -55,6 +56,7 @@ public class Strip
     rgb = rgb << 8;
     rgb |= b;*/
     int rgb = ((r&0x0ff)<<16)|((g&0x0ff)<<8)|(b&0x0ff);
+    println(rgb + " " + r + " " + g + " " + b);
     return rgb;
   }
   public int Color(byte r, byte g, byte b)
@@ -65,6 +67,7 @@ public class Strip
     rgb = rgb << 8;
     rgb |= b;*/
     int rgb = ((r&0x0ff)<<16)|((g&0x0ff)<<8)|(b&0x0ff);
+    println(rgb + " " + r + " " + g + " " + b);
     return rgb;
   }
   
