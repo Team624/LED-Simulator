@@ -141,16 +141,16 @@ void draw()
    coop_rainbowlaser();
  }
  else if(robot_state == STATE_BROWNOUT) {
-   fillStrip(strip.Color(70, 25, 0), (byte)255);
-   fillStripZ(stripz.Color(70, 25, 0), (byte)255);
+   fillStrip(strip.Color(70, 25, 0), 255);
+   fillStripZ(stripz.Color(70, 25, 0), 255);
  }
  else if(robot_state == STATE_LOST_COMM) {
-   fillStrip(strip.Color(255, 0, 0), (byte)255);
-   fillStripZ(stripz.Color(255, 0, 0), (byte)255);
+   fillStrip(strip.Color(255, 0, 0), 255);
+   fillStripZ(stripz.Color(255, 0, 0), 255);
  }
  else if(robot_state == STATE_FULL) {
-   fillStrip(strip.Color(0, 0, 255), (byte)255);
-   fillStripZ(stripz.Color(0, 0, 255), (byte)255);
+   fillStrip(strip.Color(0, 0, 255), 255);
+   fillStripZ(stripz.Color(0, 0, 255), 255);
  }
  else if(robot_state == STATE_DISABLED) {
    lavalamp();
@@ -412,19 +412,19 @@ void lavalamp()
   stripz.show();
 }
 
-void fillStrip(int c, byte brightness) {
-  byte r = (byte)(c >> 16);
-  byte g = (byte)(c >>  8);
-  byte b = (byte)c;
+void fillStrip(int c, int brightness) {
+  int r = c >> 16;
+    int g = c >> 8 & 0xFF;
+    int b = c  & 0xFF;
   if (!stay_white)
   {
     if(loopManager == -1)
     {
       loopManager=strip.numPixels();
     }
-    /*r = (byte)(r * brightness / 255);
+    r = (byte)(r * brightness / 255);
     g = (byte)(g * brightness / 255);
-    b = (byte)(b * brightness / 255);*/
+    b = (byte)(b * brightness / 255);
     strip.setPixelColor(loopManager, r, g, b);
     if(loopManager>=0)
     {
@@ -438,7 +438,7 @@ void fillStrip(int c, byte brightness) {
   }
 }
 
-void fillStripZ(int c, byte brightness) {
+void fillStripZ(int c, int brightness) {
   if (!stay_white)
   {
     if(loopManagerZ == -1)
@@ -446,9 +446,9 @@ void fillStripZ(int c, byte brightness) {
       loopManagerZ=stripz.numPixels();
     }
     
-    int r = (int)red(c);
-    int g = (int)green(c);
-    int b = (int)blue(c);
+    int r = c >> 16;
+    int g = c >> 8 & 0xFF;
+    int b = c  & 0xFF;
     print(r + " " + g + " " + b + "s");
     r = (r * brightness) / 255;
     g = (g * brightness) / 255;
