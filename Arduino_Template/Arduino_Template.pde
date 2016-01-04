@@ -11,7 +11,8 @@
 */
 
 
-int boxY = 10000;
+int boxY = 450;
+int circleX = 50; 
 boolean OUTPUT = true;
 boolean INPUT = false;
 
@@ -90,8 +91,8 @@ int loopManagerZ = -1;
 */
 boolean on = true;
 boolean stay_white = false;
-byte finger_height;
-boolean elevator_auto;
+byte finger_height = 100;
+boolean elevator_auto = true;
 boolean stabilizer_on;
 boolean finger_on;
 byte robot_state = 8, old_state; 
@@ -106,7 +107,7 @@ void draw()
   
   //if you have a height variable that varies along with a moving
   //part on the robot, set it to heightSlider()
-  finger_height = heightSlide();
+  heightSlide();
   
   if(old_state != robot_state)
   {
@@ -128,9 +129,14 @@ void draw()
  *  would be put here
  */
  
- if(robot_state == STATE_TELEOP) {
-   rainbow(0);
- }
+ if (robot_state == STATE_TELEOP || robot_state == STATE_FULL) {
+    for(int i = 0 ; i < strip.numPixels(); i ++)
+    {
+      strip.setPixelColor(i, 0);
+      stripz.setPixelColor(i, 0);
+    }
+    uprights();
+  }
  else if(robot_state == STATE_AUTO) {
    pixelate();
  }
@@ -147,10 +153,6 @@ void draw()
  else if(robot_state == STATE_LOST_COMM) {
    fillStrip(strip.Color(255, 0, 0), 255);
    fillStripZ(stripz.Color(255, 0, 0), 255);
- }
- else if(robot_state == STATE_FULL) {
-   fillStrip(strip.Color(0, 0, 255), 255);
-   fillStripZ(stripz.Color(0, 0, 255), 255);
  }
  else if(robot_state == STATE_DISABLED) {
    lavalamp();
@@ -173,6 +175,60 @@ void draw()
 *  Put any methods in here. If you have any loops in the code, please use
 *  the loopManager accordingly. Loops do not work when called from the loop 
 */
+void uprights()
+{
+  if (robot_state == STATE_FULL) {
+    fillStrip(strip.Color(0, 60, 0), 255);
+    fillStripZ(strip.Color(0, 60, 0), 255);
+  }
+  //STABILIZER
+  if (stabilizer_on)
+  {
+    for (int i = strip.numPixels(); i > 4 * strip.numPixels() / 5; i--)
+    {
+      strip.setPixelColor(i, strip.Color(0, 0, 255));
+      stripz.setPixelColor(i, stripz.Color(0, 0, 255));
+    }
+  }
+
+  //ELEVATOR
+  if (elevator_auto)
+  {
+    for (int iii = 0; iii < 22; iii++)
+    {
+      strip.setPixelColor(iii, strip.Color(0, 255, 0));
+      stripz.setPixelColor(iii, stripz.Color(0, 255, 0));
+    }
+  }
+  else
+  {
+    for (int iii = 0; iii < 22; iii++)
+    {
+      strip.setPixelColor(iii, strip.Color(255, 0, 0));
+      stripz.setPixelColor(iii, stripz.Color(255, 0, 0));
+    }
+  }
+
+  //FINGER
+
+  for (int f = finger_height; f < finger_height + 10; f++)
+  {
+    if (finger_on)
+    {
+      strip.setPixelColor(f, strip.Color(0, 255, 0));
+      stripz.setPixelColor(f, stripz.Color(0, 255, 0));
+    }
+    else
+    {
+      strip.setPixelColor(f, strip.Color(255, 255, 255));
+      stripz.setPixelColor(f, stripz.Color(255, 255, 255));
+    }
+  }
+
+  //ROLLERS
+
+}
+
 void pixelate()
 {
   byte i, px, pxs, pxss, pxz, pxsz, pxssz, Color;
@@ -413,19 +469,23 @@ void lavalamp()
 }
 
 void fillStrip(int c, int brightness) {
-  int r = c >> 16;
-    int g = c >> 8 & 0xFF;
-    int b = c  & 0xFF;
-  if (!stay_white)
+  if (true)
   {
     if(loopManager == -1)
     {
       loopManager=strip.numPixels();
     }
-    r = (byte)(r * brightness / 255);
-    g = (byte)(g * brightness / 255);
-    b = (byte)(b * brightness / 255);
+    
+    int r = c >> 16;
+    int g = c >> 8 & 0xFF;
+    int b = c  & 0xFF;
+    
+    r = (r * brightness) / 255;
+    g = (g * brightness) / 255;
+    b = (b * brightness) / 255;
+    
     strip.setPixelColor(loopManager, r, g, b);
+    
     if(loopManager>=0)
     {
        loopManager--;
@@ -439,7 +499,7 @@ void fillStrip(int c, int brightness) {
 }
 
 void fillStripZ(int c, int brightness) {
-  if (!stay_white)
+  if (true)
   {
     if(loopManagerZ == -1)
     {
@@ -449,11 +509,11 @@ void fillStripZ(int c, int brightness) {
     int r = c >> 16;
     int g = c >> 8 & 0xFF;
     int b = c  & 0xFF;
-    print(r + " " + g + " " + b + "s");
+ 
     r = (r * brightness) / 255;
     g = (g * brightness) / 255;
     b = (b * brightness) / 255;
-    println(r + " " + g + " " + b);
+    
     stripz.setPixelColor(loopManagerZ, r, g, b);
     
     if(loopManagerZ>=0)
@@ -519,7 +579,7 @@ void pinMode(int pin, boolean output)
 {
 }
 
-byte heightSlide()
+void heightSlide()
 {
   rectMode(CORNERS);
   stroke(#00FF00);
@@ -527,8 +587,16 @@ byte heightSlide()
   fill(#000000);
   rect(0, height - 50, width - 1, height - 1);
   
-  return 0;
-  
+  if(mousePressed == true)
+  {
+    if(mouseY > 500 && mouseX > 50 && mouseX < width - 100)
+    {
+      finger_height =  (byte)(map(mouseX, 0, width - 100, 19, strip.numPixels() - 9));
+      circleX = mouseX;
+    }
+  }
+  fill(#00FF00);
+  ellipse(circleX, 525, 20, 20);
 }
 
 void stateSelector()
