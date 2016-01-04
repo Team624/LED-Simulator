@@ -39,7 +39,7 @@ public class Strip
        stroke(red(c), green(c), blue(c));
        point(ledDistance * (i + 1), place + 13);  
     }
-    delay(5);
+    //delay(5);
   }  
   
   public byte numPixels()
@@ -50,24 +50,12 @@ public class Strip
   
   public int Color(int r, int g, int b)
   {  
-    /*int rgb = r;
-    rgb = rgb << 8;
-    rgb |= g;
-    rgb = rgb << 8;
-    rgb |= b;*/
     int rgb = ((r&0x0ff)<<16)|((g&0x0ff)<<8)|(b&0x0ff);
-    println(rgb + " " + r + " " + g + " " + b);
     return rgb;
   }
   public int Color(byte r, byte g, byte b)
   {  
-    /*int rgb = r;
-    rgb = rgb << 8;
-    rgb |= g;
-    rgb = rgb << 8;
-    rgb |= b;*/
     int rgb = ((r&0x0ff)<<16)|((g&0x0ff)<<8)|(b&0x0ff);
-    println(rgb + " " + r + " " + g + " " + b);
     return rgb;
   }
   
@@ -75,14 +63,35 @@ public class Strip
   public void setPixelColor(byte pixel, int c)
   {
     if(pixel>=0 && pixel<numPixels()) {
-        leds[pixel] = c;
+      leds[pixel] = c;
+      //println(c);
     }
     else {}
   }
   public void setPixelColor(int pixel, int c)
   {
     if(pixel>=0 && pixel<numPixels()) {
-        leds[pixel] = c;
+      leds[pixel] = c;
+      //println(c);
+    }
+    else {}
+  }
+  
+  public void setPixelColor(byte pixel, int r, int g, int b)
+  {
+    if(pixel>=0 && pixel<numPixels()) {
+      int rgb = ((r&0x0ff)<<16)|((g&0x0ff)<<8)|(b&0x0ff);
+      leds[pixel] = rgb;
+      //println(rgb);
+    }
+    else {}
+  }
+  public void setPixelColor(int pixel, int r, int g, int b)
+  {
+    if(pixel>=0 && pixel<numPixels()) {
+      int rgb = ((r&0x0ff)<<16)|((g&0x0ff)<<8)|(b&0x0ff);
+      leds[pixel] = rgb;
+      //println(rgb);
     }
     else {}
   }
