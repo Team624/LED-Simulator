@@ -39,7 +39,7 @@ Strip stripz = new Strip(/* Strip Length */ (byte)120, PINZ, 366); //creates an 
 
 void setup()
 {
-  size(1300,500);
+  size(1300,550);
   PFont font;
   font = createFont("Calibri", 14);
   textFont(font);
@@ -103,11 +103,10 @@ boolean first_loop;
 void draw()
 {
   stateSelector();
-  stroke(#00FF00);
-  noFill();
-  rectMode(CORNER);
-  rect(width - 100, boxY, 100, 50);
-  rectMode(CORNERS);
+  
+  //if you have a height variable that varies along with a moving
+  //part on the robot, set it to heightSlider()
+  finger_height = heightSlide();
   
   if(old_state != robot_state)
   {
@@ -520,13 +519,25 @@ void pinMode(int pin, boolean output)
 {
 }
 
+byte heightSlide()
+{
+  rectMode(CORNERS);
+  stroke(#00FF00);
+  strokeWeight(3);
+  fill(#000000);
+  rect(0, height - 50, width - 1, height - 1);
+  
+  return 0;
+  
+}
+
 void stateSelector()
 {
   rectMode(CORNERS);
   stroke(#00FF00);
   strokeWeight(3);
   fill(#000000);
-  rect(width - 100, 0, width, height);
+  rect(width - 100, 0, width - 1, height - 50);
   
   fill(#00FF00);
   text("Teleop", width - 85, 50);
@@ -537,7 +548,7 @@ void stateSelector()
   text("Lost Comms", width - 85, 300);
   text("Full", width - 85, 350);
   text("Disable", width - 85, 400);
-  text("No State", width - 85, 480);
+  text("No State", width - 85, 475);
   
   if(mousePressed == true)
   {
@@ -584,9 +595,14 @@ void stateSelector()
     if(mouseX > width - 100 && mouseY > 450 && 500 > mouseY)
     {
       robot_state = (byte)STATE_UNKNOWN;
-      boxY = 460;
+      boxY = 450;
     }
   }
+  stroke(#00FF00);
+  noFill();
+  rectMode(CORNER);
+  rect(width - 100, boxY, 100, 50);
+  rectMode(CORNERS);
 }
 
 void clearStrip()
