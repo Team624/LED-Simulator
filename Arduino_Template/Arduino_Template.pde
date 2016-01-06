@@ -12,7 +12,7 @@
 
 
 int boxY = 450;
-int circleX = 50; 
+int circleX = 51; 
 boolean OUTPUT = true;
 boolean INPUT = false;
 
@@ -91,7 +91,7 @@ int loopManagerZ = -1;
 */
 boolean on = true;
 boolean stay_white = false;
-byte finger_height = 100;
+byte finger_height = 19;
 boolean elevator_auto = true;
 boolean stabilizer_on;
 boolean finger_on;
@@ -175,60 +175,6 @@ void draw()
 *  Put any methods in here. If you have any loops in the code, please use
 *  the loopManager accordingly. Loops do not work when called from the loop 
 */
-void uprights()
-{
-  if (robot_state == STATE_FULL) {
-    fillStrip(strip.Color(0, 60, 0), 255);
-    fillStripZ(strip.Color(0, 60, 0), 255);
-  }
-  //STABILIZER
-  if (stabilizer_on)
-  {
-    for (int i = strip.numPixels(); i > 4 * strip.numPixels() / 5; i--)
-    {
-      strip.setPixelColor(i, strip.Color(0, 0, 255));
-      stripz.setPixelColor(i, stripz.Color(0, 0, 255));
-    }
-  }
-
-  //ELEVATOR
-  if (elevator_auto)
-  {
-    for (int iii = 0; iii < 22; iii++)
-    {
-      strip.setPixelColor(iii, strip.Color(0, 255, 0));
-      stripz.setPixelColor(iii, stripz.Color(0, 255, 0));
-    }
-  }
-  else
-  {
-    for (int iii = 0; iii < 22; iii++)
-    {
-      strip.setPixelColor(iii, strip.Color(255, 0, 0));
-      stripz.setPixelColor(iii, stripz.Color(255, 0, 0));
-    }
-  }
-
-  //FINGER
-
-  for (int f = finger_height; f < finger_height + 10; f++)
-  {
-    if (finger_on)
-    {
-      strip.setPixelColor(f, strip.Color(0, 255, 0));
-      stripz.setPixelColor(f, stripz.Color(0, 255, 0));
-    }
-    else
-    {
-      strip.setPixelColor(f, strip.Color(255, 255, 255));
-      stripz.setPixelColor(f, stripz.Color(255, 255, 255));
-    }
-  }
-
-  //ROLLERS
-
-}
-
 void pixelate()
 {
   byte i, px, pxs, pxss, pxz, pxsz, pxssz, Color;
@@ -569,7 +515,61 @@ int Wheel(int WheelPos) {
   }
 }
 
+void uprights()
+{
+  if (robot_state == STATE_FULL) {
+    fillStrip(strip.Color(0, 60, 0), 255);
+    fillStripZ(strip.Color(0, 60, 0), 255);
+  }
+  else
+  {
+  //STABILIZER
+  if (stabilizer_on)
+  {
+    for (int i = strip.numPixels(); i > 4 * strip.numPixels() / 5; i--)
+    {
+      strip.setPixelColor(i, strip.Color(0, 0, 255));
+      stripz.setPixelColor(i, stripz.Color(0, 0, 255));
+    }
+  }
 
+  //ELEVATOR
+  if (elevator_auto)
+  {
+    for (int iii = 0; iii < 22; iii++)
+    {
+      strip.setPixelColor(iii, strip.Color(0, 255, 0));
+      stripz.setPixelColor(iii, stripz.Color(0, 255, 0));
+    }
+  }
+  else
+  {
+    for (int iii = 0; iii < 22; iii++)
+    {
+      strip.setPixelColor(iii, strip.Color(255, 0, 0));
+      stripz.setPixelColor(iii, stripz.Color(255, 0, 0));
+    }
+  }
+
+  //FINGER
+
+  for (int f = finger_height; f < finger_height + 10; f++)
+  {
+    if (finger_on)
+    {
+      strip.setPixelColor(f, strip.Color(0, 255, 0));
+      stripz.setPixelColor(f, stripz.Color(0, 255, 0));
+    }
+    else
+    {
+      strip.setPixelColor(f, strip.Color(255, 255, 255));
+      stripz.setPixelColor(f, stripz.Color(255, 255, 255));
+    }
+  }
+  }
+  //ROLLERS
+  
+}
 /* 
 *  End of User entered methods
 */
@@ -586,17 +586,34 @@ void heightSlide()
   strokeWeight(3);
   fill(#000000);
   rect(0, height - 50, width - 1, height - 1);
+  fill(#00FF00);
+  text("Stabilizer", 530, width - 100);
   
   if(mousePressed == true)
   {
-    if(mouseY > 500 && mouseX > 50 && mouseX < width - 100)
+    if(mouseY > 500 && mouseX > 50 && mouseX < width - 170)
     {
-      finger_height =  (byte)(map(mouseX, 0, width - 100, 19, strip.numPixels() - 9));
+      finger_height =  (byte)(map(mouseX, 5, width - 170, 20, strip.numPixels() - 32));
       circleX = mouseX;
+    }
+    
+    
+    if(mouseY > 500 && mouseY < 550 && mouseX > width - 100 && mouseX < width - 50)
+    {
+      stabilizer_on = !stabilizer_on;
+    }
+    if(mouseY > 550 && mouseY < 600 && mouseX > width - 100 && mouseX < width - 50)
+    {
+      elevator_auto = !elevator_auto;
+    }
+    if(mouseY > 550 && mouseY < 600 && mouseX > width - 100 && mouseX < width - 50)
+    {
+      elevator_auto = !elevator_auto;
     }
   }
   fill(#00FF00);
   ellipse(circleX, 525, 20, 20);
+  
 }
 
 void stateSelector()
