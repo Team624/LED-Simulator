@@ -12,7 +12,7 @@
 
 
 int boxY = 450;
-int circleX = 51; 
+int circleX = 200; 
 boolean OUTPUT = true;
 boolean INPUT = false;
 
@@ -585,30 +585,42 @@ void heightSlide()
   stroke(#00FF00);
   strokeWeight(3);
   fill(#000000);
-  rect(0, height - 50, width - 1, height - 1);
+  rect(0, height - 50, width / 2, height - 1);
+  
+  rectMode(CORNERS);
+  stroke(#00FF00);
+  strokeWeight(3);
+  fill(#000000);
+  rect(width / 2, height - 50, width - 1, height - 1);
+  
   fill(#00FF00);
-  text("Stabilizer", 530, width - 100);
+  text("Stabilizer", width - 100, height - 20);
+  text("Elevator auto", width - 200, height - 20);
+  text("Finger", width - 300, height - 20);
   
   if(mousePressed == true)
   {
-    if(mouseY > 500 && mouseX > 50 && mouseX < width - 170)
+    if(mouseY > 500 && mouseX > 50 && mouseX < width / 2 - 50)
     {
-      finger_height =  (byte)(map(mouseX, 5, width - 170, 20, strip.numPixels() - 32));
+      finger_height =  (byte)(map(mouseX, 50, width / 2 - 50, 22, strip.numPixels() - 31.75));
       circleX = mouseX;
     }
     
     
-    if(mouseY > 500 && mouseY < 550 && mouseX > width - 100 && mouseX < width - 50)
+    if(mouseY > 500 && mouseY < 550 && mouseX > width - 125 && mouseX < width - 25)
     {
       stabilizer_on = !stabilizer_on;
+      delay(100);
     }
-    if(mouseY > 550 && mouseY < 600 && mouseX > width - 100 && mouseX < width - 50)
+    if(mouseY > 500 && mouseY < 550 && mouseX > width - 225 && mouseX < width - 125)
     {
       elevator_auto = !elevator_auto;
+      delay(100);
     }
-    if(mouseY > 550 && mouseY < 600 && mouseX > width - 100 && mouseX < width - 50)
+    if(mouseY > 500 && mouseY < 550 && mouseX > width - 325 && mouseX < width - 225)
     {
-      elevator_auto = !elevator_auto;
+      finger_on = !finger_on;
+      delay(100);
     }
   }
   fill(#00FF00);
